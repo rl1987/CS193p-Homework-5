@@ -64,6 +64,8 @@
         
     });
     
+    dispatch_release(locationFetchingQueue);
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

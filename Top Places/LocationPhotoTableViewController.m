@@ -26,6 +26,8 @@
         });
     });
     
+    dispatch_release(photoListFetchingQueue);
+    
     return nil;
 }
 
