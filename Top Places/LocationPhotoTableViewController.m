@@ -11,10 +11,22 @@
 
 - (NSArray *)retrievePhotoList
 {
-    self.photos = [FlickrFetcher photosInPlace:self.place 
-                                    maxResults:MAX_RESULTS];
+    dispatch_queue_t photoListFetchingQueue = 
+    dispatch_queue_create("photo list fetching queue", NULL);
     
-    return self.photos;
+    dispatch_async(photoListFetchingQueue, ^{
+        if (self.photos)
+            return;
+        
+        self.photos = [FlickrFetcher photosInPlace:self.place 
+                                        maxResults:MAX_RESULTS];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    });
+    
+    return nil;
 }
 
 #define MAX_RECENT_PHOTOS 50

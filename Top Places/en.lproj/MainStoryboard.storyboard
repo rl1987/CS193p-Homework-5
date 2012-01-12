@@ -92,7 +92,16 @@
                             </tableViewCell>
                         </prototypes>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Places" id="aDi-xt-VfI"/>
+                    <navigationItem key="navigationItem" title="Places" id="aDi-xt-VfI">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="368-hz-rqG">
+                            <connections>
+                                <action selector="refresh:" destination="iba-hg-8K0" id="lf2-uQ-k3B"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="refreshButton" destination="368-hz-rqG" id="7of-Gh-mLC"/>
+                    </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1306" y="-541"/>

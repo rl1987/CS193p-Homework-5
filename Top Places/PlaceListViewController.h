@@ -6,5 +6,8 @@
 @interface PlaceListViewController : UITableViewController
 
 @property (nonatomic,strong) NSDictionary *places;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+
+- (IBAction)refresh:(id)sender;
 
 @end

@@ -1,11 +1,22 @@
 #import "PlaceListViewController.h"
 
+@interface PlaceListViewController()
+
+- (void)getTopLocations;
+
+@end
 
 @implementation PlaceListViewController
 
 @synthesize places = _places;
+@synthesize refreshButton = _refreshButton;
 
 #pragma mark - View lifecycle
+
+- (void)awakeFromNib
+{
+    [self getTopLocations];
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:
 (UIInterfaceOrientation)interfaceOrientation
@@ -15,33 +26,49 @@
 
 #pragma mark - Table view data source
 
+- (void)getTopLocations
+{
+    
+    dispatch_queue_t locationFetchingQueue = 
+    dispatch_queue_create("location fetching queue", NULL);
+    
+    dispatch_async(locationFetchingQueue, ^{
+        NSArray *fetchResults = [FlickrFetcher topPlaces];
+        
+        NSMutableDictionary *places = [[NSMutableDictionary alloc] init];
+        
+        for (NSDictionary *f in fetchResults)
+        {
+            NSString *country;
+            
+            NSArray *placenames = [[f objectForKey:@"_content"] 
+                                   componentsSeparatedByString:@", "];
+            
+            if ([placenames count]>=2)
+                country = [placenames lastObject];
+            else
+                country = @"Unknown";
+            
+            if (![places objectForKey:country])
+                [places setObject:[NSMutableArray array] forKey:country];
+            
+            [[places objectForKey:country] addObject:f];
+            
+        }
+        
+        self.places = places;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+        
+    });
+    
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //self.places = 
-    
-    NSArray *fetchResults = [FlickrFetcher topPlaces];
-    NSMutableDictionary *places = [[NSMutableDictionary alloc] init];
-    
-    for (NSDictionary *f in fetchResults)
-    {
-        NSString *country;
-        
-        NSArray *placenames = [[f objectForKey:@"_content"] 
-                               componentsSeparatedByString:@", "];
-        
-        if ([placenames count]>=2)
-            country = [placenames lastObject];
-        else
-            country = @"Unknown";
-        
-        if (![places objectForKey:country])
-            [places setObject:[NSMutableArray array] forKey:country];
-        
-        [[places objectForKey:country] addObject:f];
-        
-    }
-    
-    self.places = places;
+    //[self getTopLocations];
     
     return [self.places count];
 }
@@ -126,6 +153,18 @@ titleForHeaderInSection:(NSInteger)section
     [(LocationPhotoTableViewController *) segue.destinationViewController 
      setPlace:thePlace];
 
+}
+
+- (void)viewDidUnload {
+    [self setRefreshButton:nil];
+    [self setRefreshButton:nil];
+    [super viewDidUnload];
+}
+
+- (IBAction)refresh:(id)sender 
+{
+    [self getTopLocations];
+    
 }
 
 @end
