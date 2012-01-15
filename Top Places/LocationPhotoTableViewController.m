@@ -32,7 +32,7 @@
     return nil;
 }
 
-#define MAX_RECENT_PHOTOS 50
+#define MAX_RECENT_PHOTOS 20
 
 - (void)addPhotoToRecents:(NSDictionary *)photo
 {
