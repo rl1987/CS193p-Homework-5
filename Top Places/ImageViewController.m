@@ -17,13 +17,6 @@
 @synthesize imageURL = _imageURL;
 @synthesize scrollView = _scrollView;
            
-- (void)awakeFromNib
-{
-    self.scrollView.delegate = self;
-    
-    self.scrollView.maximumZoomScale = 1/[[UIScreen mainScreen] scale];
-}
-
 - (void)loadImage
 {
     if (self.imageView) {
@@ -41,6 +34,13 @@
                     CGFloat yScale=viewSize.height/imageSize.height;
                     
                     self.scrollView.minimumZoomScale = MIN(xScale,yScale);
+                    
+                    self.scrollView.contentSize = imageSize;
+                    
+                    self.imageView.frame = 
+                    CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
+                    
+                    self.scrollView.zoomScale = MAX(xScale,yScale);
                 });
             });
             dispatch_release(imageDownloadQ);
@@ -60,6 +60,16 @@
             self.imageView.image = nil; // but image has changed (so we can't leave imageView.image the same, so set to nil)
         }
     }
+}
+
+#pragma mark -
+#pragma mark View lifecycle
+
+- (void)awakeFromNib
+{
+    self.scrollView.delegate = self;
+    
+    self.scrollView.maximumZoomScale = 1/[[UIScreen mainScreen] scale];
 }
 
 - (void)viewWillAppear:(BOOL)animated
