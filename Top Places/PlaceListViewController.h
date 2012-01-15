@@ -2,6 +2,7 @@
 
 #import "FlickrFetcher.h"
 #import "LocationPhotoTableViewController.h"
+#import "MapViewController.h"
 
 @interface PlaceListViewController : UITableViewController
 

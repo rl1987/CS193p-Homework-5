@@ -20,6 +20,9 @@
 		B7B0366314BA08F6004EA3DE /* FlickrFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B0366214BA08F6004EA3DE /* FlickrFetcher.m */; };
 		B7B0366614BA1558004EA3DE /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B0366514BA1557004EA3DE /* ImageViewController.m */; };
 		B7D0D7D414BEE3B500DF8B4C /* LocationPhotoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0D7D314BEE3B500DF8B4C /* LocationPhotoTableViewController.m */; };
+		B7D0D7E814BF555600DF8B4C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0D7E714BF555300DF8B4C /* MapViewController.m */; };
+		B7D0D7EB14BF590600DF8B4C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D0D7EA14BF590600DF8B4C /* MapKit.framework */; };
+		B7D0D7ED14BF590D00DF8B4C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D0D7EC14BF590D00DF8B4C /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,10 +32,10 @@
 		B7B0362E14B9CB0C004EA3DE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B7B0363014B9CB0C004EA3DE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B7B0363214B9CB0C004EA3DE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		B7B0363614B9CB0C004EA3DE /* Fast Map Places-Info.plist */ = {isa = PBXFileReference; path = "Fast Map Places-Info.plist"; sourceTree = "<group>"; };
+		B7B0363614B9CB0C004EA3DE /* Fast Map Places-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Fast Map Places-Info.plist"; sourceTree = "<group>"; };
 		B7B0363814B9CB0C004EA3DE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B7B0363A14B9CB0C004EA3DE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		B7B0363C14B9CB0C004EA3DE /* Fast Map Places-Prefix.pch */ = {isa = PBXFileReference; path = "Fast Map Places-Prefix.pch"; sourceTree = "<group>"; };
+		B7B0363C14B9CB0C004EA3DE /* Fast Map Places-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fast Map Places-Prefix.pch"; sourceTree = "<group>"; };
 		B7B0363D14B9CB0C004EA3DE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B7B0363E14B9CB0C004EA3DE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B7B0364114B9CB0C004EA3DE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -47,6 +50,10 @@
 		B7B0366514BA1557004EA3DE /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
 		B7D0D7D214BEE3B500DF8B4C /* LocationPhotoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationPhotoTableViewController.h; sourceTree = "<group>"; };
 		B7D0D7D314BEE3B500DF8B4C /* LocationPhotoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationPhotoTableViewController.m; sourceTree = "<group>"; };
+		B7D0D7E614BF555100DF8B4C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		B7D0D7E714BF555300DF8B4C /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		B7D0D7EA14BF590600DF8B4C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		B7D0D7EC14BF590D00DF8B4C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7D0D7ED14BF590D00DF8B4C /* CoreLocation.framework in Frameworks */,
+				B7D0D7EB14BF590600DF8B4C /* MapKit.framework in Frameworks */,
 				B7B0362F14B9CB0C004EA3DE /* UIKit.framework in Frameworks */,
 				B7B0363114B9CB0C004EA3DE /* Foundation.framework in Frameworks */,
 				B7B0363314B9CB0C004EA3DE /* CoreGraphics.framework in Frameworks */,
@@ -83,6 +92,8 @@
 		B7B0362D14B9CB0C004EA3DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B7D0D7EC14BF590D00DF8B4C /* CoreLocation.framework */,
+				B7D0D7EA14BF590600DF8B4C /* MapKit.framework */,
 				B7B0362E14B9CB0C004EA3DE /* UIKit.framework */,
 				B7B0363014B9CB0C004EA3DE /* Foundation.framework */,
 				B7B0363214B9CB0C004EA3DE /* CoreGraphics.framework */,
@@ -99,6 +110,8 @@
 				B7B0366214BA08F6004EA3DE /* FlickrFetcher.m */,
 				B7B0363D14B9CB0C004EA3DE /* AppDelegate.h */,
 				B7B0363E14B9CB0C004EA3DE /* AppDelegate.m */,
+				B7D0D7E614BF555100DF8B4C /* MapViewController.h */,
+				B7D0D7E714BF555300DF8B4C /* MapViewController.m */,
 				B7B0364C14B9CC08004EA3DE /* PlaceListViewController.h */,
 				B7B0364D14B9CC08004EA3DE /* PlaceListViewController.m */,
 				B7B0365614B9EE31004EA3DE /* PhotoTableViewController.h */,
@@ -212,6 +225,7 @@
 				B7B0366614BA1558004EA3DE /* ImageViewController.m in Sources */,
 				B77E69DE14BDCA2600199D1C /* RecentPhotoTableViewController.m in Sources */,
 				B7D0D7D414BEE3B500DF8B4C /* LocationPhotoTableViewController.m in Sources */,
+				B7D0D7E814BF555600DF8B4C /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

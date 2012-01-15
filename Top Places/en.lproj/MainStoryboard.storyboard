@@ -48,7 +48,13 @@
                             <outlet property="delegate" destination="B3T-he-lR7" id="Chc-rX-Rye"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Recent photos" id="vRb-96-vV1"/>
+                    <navigationItem key="navigationItem" title="Recent photos" id="vRb-96-vV1">
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="uqd-qD-kp1">
+                            <connections>
+                                <segue destination="rfi-IT-tij" kind="push" id="RX7-Zl-hKe"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1306" y="24"/>
@@ -98,6 +104,11 @@
                                 <action selector="refresh:" destination="iba-hg-8K0" id="lf2-uQ-k3B"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="eQ2-lr-bjb">
+                            <connections>
+                                <segue destination="JIe-ni-LTf" kind="push" id="ix0-bZ-LnB"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="refreshButton" destination="368-hz-rqG" id="7of-Gh-mLC"/>
@@ -105,6 +116,22 @@
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1306" y="-541"/>
+        </scene>
+        <scene sceneID="vMV-xZ-skW">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iFe-XH-baw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="JIe-ni-LTf" customClass="MapViewController" sceneMemberID="viewController">
+                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="Nne-sK-RbH">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <connections>
+                            <outlet property="delegate" destination="JIe-ni-LTf" id="SDK-Hb-U1A"/>
+                        </connections>
+                    </mapView>
+                    <navigationItem key="navigationItem" id="2i0-s8-9JU"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1791" y="-1167"/>
         </scene>
         <scene sceneID="ZRV-Xh-Xl9">
             <objects>
@@ -149,7 +176,17 @@
                             <outlet property="delegate" destination="huA-gw-HdO" id="BBi-QH-dfc"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Pictures" id="QLd-z8-s83"/>
+                    <navigationItem key="navigationItem" title="Pictures" id="QLd-z8-s83">
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="TAD-wE-CVJ">
+                            <connections>
+                                <action selector="mapPressed:" destination="huA-gw-HdO" id="cPA-RO-R3d"/>
+                                <segue destination="JIe-ni-LTf" kind="push" id="aWd-0y-uuC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="mapButton" destination="TAD-wE-CVJ" id="th3-gP-rTp"/>
+                    </connections>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1791" y="-541"/>
@@ -158,11 +195,11 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QGv-iy-bHB" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="yhm-Fd-9no" customClass="ImageViewController" sceneMemberID="viewController">
-                    <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" indicatorStyle="white" minimumZoomScale="0.0" maximumZoomScale="25" id="YWs-CD-tj3">
+                    <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" indicatorStyle="white" minimumZoomScale="0.0" maximumZoomScale="25" id="YWs-CD-tj3">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFill" id="p9d-AZ-hhF">
+                            <imageView multipleTouchEnabled="YES" contentMode="center" id="p9d-AZ-hhF">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
@@ -202,7 +239,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Qq-9Q-cLC" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="5bM-ur-SQv" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Top Places" id="G3C-vy-HNJ"/>
+                    <tabBarItem key="tabBarItem" systemItem="topRated" id="G3C-vy-HNJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Ap5-rK-MnI">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -220,7 +257,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3hz-d4-ZUb" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="hLn-mq-kkf" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Recents" id="MpP-RH-H33"/>
+                    <tabBarItem key="tabBarItem" systemItem="recents" id="MpP-RH-H33"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="M7b-LP-Zpv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -260,10 +297,60 @@
             </objects>
             <point key="canvasLocation" x="1791" y="24"/>
         </scene>
+        <scene sceneID="3re-9X-9iv">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wfi-UG-REU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="rfi-IT-tij" customClass="MapViewController" sceneMemberID="viewController">
+                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="1MX-tc-ox7">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <connections>
+                            <outlet property="delegate" destination="rfi-IT-tij" id="AgM-mf-G5f"/>
+                        </connections>
+                    </mapView>
+                    <navigationItem key="navigationItem" id="hdb-zp-z0D"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1791" y="642"/>
+        </scene>
     </scenes>
+    <classes>
+        <class className="ImageViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ImageViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="LocationPhotoTableViewController" superclassName="PhotoTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LocationPhotoTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="mapButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="MapViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapViewController.h"/>
+        </class>
+        <class className="PhotoTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoTableViewController.h"/>
+        </class>
+        <class className="PlaceListViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlaceListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="refresh:"/>
+                <relationship kind="outlet" name="refreshButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="RecentPhotoTableViewController" superclassName="PhotoTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RecentPhotoTableViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="aWd-0y-uuC"/>
+    </inferredMetricsTieBreakers>
 </document>

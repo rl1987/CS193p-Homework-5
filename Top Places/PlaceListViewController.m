@@ -136,24 +136,24 @@ titleForHeaderInSection:(NSInteger)section
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     
-    NSAssert([sender isKindOfClass:[UITableViewCell class]],
-             @"ERROR: Class mismatch 1");
+    if ([segue.destinationViewController 
+         isKindOfClass:[LocationPhotoTableViewController class]])
+    {
+        NSIndexPath *placeIndex = [self.tableView indexPathForCell:sender];
+        
+        NSDictionary *thePlace = [[self placesInCountry:[placeIndex section]] 
+                                  objectAtIndex:[placeIndex row]];
+        
+        [(LocationPhotoTableViewController *) segue.destinationViewController 
+         setPlace:thePlace];
+        
+    }
+    else if ([segue.destinationViewController 
+              isKindOfClass:[MapViewController class]])
+    {
+        // Do geographical stuff.
+    }  
     
-    NSAssert([segue.destinationViewController 
-              isKindOfClass:[LocationPhotoTableViewController class]],
-             @"ERROR: Class mismatch 2");
-    
-    if (![segue.destinationViewController 
-         respondsToSelector:@selector(setPlace:)])
-        return;
-    
-    NSIndexPath *placeIndex = [self.tableView indexPathForCell:sender];
-    
-    NSDictionary *thePlace = [[self placesInCountry:[placeIndex section]] 
-                              objectAtIndex:[placeIndex row]];
-    
-    [(LocationPhotoTableViewController *) segue.destinationViewController 
-     setPlace:thePlace];
 
 }
 

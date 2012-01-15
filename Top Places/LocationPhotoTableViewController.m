@@ -1,6 +1,7 @@
 #import "LocationPhotoTableViewController.h"
 
 @implementation LocationPhotoTableViewController
+@synthesize mapButton;
 
 - (void)awakeFromNib
 {
@@ -68,5 +69,11 @@
     
     [super prepareForSegue:segue sender:sender];
 }
+
+- (void)viewDidUnload {
+    [self setMapButton:nil];
+    [super viewDidUnload];
+}
+
 
 @end

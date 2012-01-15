@@ -74,6 +74,10 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    if (![segue.destinationViewController 
+          isKindOfClass:[ImageViewController class]])
+        return;
+    
     NSLog(@"PhotoTableViewController prepareForSegue:");
     
     NSURL *picURL;
