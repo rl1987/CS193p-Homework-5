@@ -7,9 +7,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ImageViewController : UIViewController <UIScrollViewDelegate>
+@interface ImageViewController : UIViewController 
+<UIScrollViewDelegate, NSCacheDelegate>
 
 @property (nonatomic, strong) NSURL *imageURL;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+
++ (NSCache *)defaultCache;
++ (void)setDefaultCache:(NSCache *)cache;
 
 @end

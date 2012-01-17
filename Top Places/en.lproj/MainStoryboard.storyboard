@@ -199,6 +199,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="qSl-MR-fg7">
+                                <rect key="frame" x="142" y="165" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                             <imageView multipleTouchEnabled="YES" contentMode="center" id="p9d-AZ-hhF">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -212,6 +216,7 @@
                     <connections>
                         <outlet property="imageView" destination="p9d-AZ-hhF" id="evt-tG-2j5"/>
                         <outlet property="scrollView" destination="YWs-CD-tj3" id="gGL-4a-ld8"/>
+                        <outlet property="spinner" destination="qSl-MR-fg7" id="1hl-Zo-91f"/>
                     </connections>
                 </viewController>
             </objects>
@@ -279,6 +284,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="odb-8E-D0r">
+                                <rect key="frame" x="143" y="164" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                             <imageView multipleTouchEnabled="YES" contentMode="center" id="vl3-Zm-I6m">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -292,6 +301,7 @@
                     <connections>
                         <outlet property="imageView" destination="vl3-Zm-I6m" id="gdr-U3-Pbk"/>
                         <outlet property="scrollView" destination="3kd-WC-TrJ" id="Smc-I6-0gb"/>
+                        <outlet property="spinner" destination="odb-8E-D0r" id="Z9H-hI-ibD"/>
                     </connections>
                 </viewController>
             </objects>
@@ -314,37 +324,6 @@
             <point key="canvasLocation" x="1791" y="642"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="ImageViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ImageViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-            </relationships>
-        </class>
-        <class className="LocationPhotoTableViewController" superclassName="PhotoTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LocationPhotoTableViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="mapButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="MapViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapViewController.h"/>
-        </class>
-        <class className="PhotoTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoTableViewController.h"/>
-        </class>
-        <class className="PlaceListViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlaceListViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="refresh:"/>
-                <relationship kind="outlet" name="refreshButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="RecentPhotoTableViewController" superclassName="PhotoTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RecentPhotoTableViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

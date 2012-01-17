@@ -77,9 +77,7 @@
     if (![segue.destinationViewController 
           isKindOfClass:[ImageViewController class]])
         return;
-    
-    NSLog(@"PhotoTableViewController prepareForSegue:");
-    
+        
     NSURL *picURL;
     
     NSAssert([sender isKindOfClass:[UITableViewCell class]],

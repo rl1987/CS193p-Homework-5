@@ -11,4 +11,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     return YES;
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    
+}
+
 @end

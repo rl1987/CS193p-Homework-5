@@ -36,9 +36,7 @@
 
 - (void)addPhotoToRecents:(NSDictionary *)photo
 {
-    
-    NSLog(@"PhotoTableViewController addPhotoToRecents:");
-    
+        
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSMutableArray *recents = [[defaults arrayForKey:@"recents"] mutableCopy];
@@ -55,9 +53,7 @@
     [defaults setObject:[recents copy] forKey:@"recents"];
     
     [defaults synchronize];
-    
-    NSLog(@"%@",recents);
-    
+        
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
