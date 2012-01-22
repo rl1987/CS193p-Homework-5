@@ -7,9 +7,7 @@
 
 #import "ImageViewController.h"
 
-static NSCache *_cache = nil;
-static NSMutableArray *_imageIds = nil;
-static NSMutableDictionary *_cachedData = nil;
+static NSWritableCache *_cache = nil;
 /* (Keys are hashes of cached data, objects are imaged IDs.) */
 
 @interface ImageViewController()
@@ -27,19 +25,15 @@ static NSMutableDictionary *_cachedData = nil;
 @synthesize imageURL = _imageURL;
 @synthesize scrollView = _scrollView;
 @synthesize spinner = _spinner;
-          
-- (void)cache:(NSCache *)cache willEvictObject:(id)obj
-{
-    NSUInteger hash = [obj hash];
-    
-    [_cachedData removeObjectForKey:[NSNumber numberWithInteger:hash]];
-}
+     
+#pragma mark -
+#pragma mark Caching related arguments
 
-+ (NSCache *)defaultCache
++ (NSWritableCache *)defaultCache
 {
     if (_cache == nil)
     {
-        _cache = [[NSCache alloc] init];
+        _cache = [[NSWritableCache alloc] init];
         
         [_cache setTotalCostLimit:10*1024*1024]; // 10 MB
         
@@ -51,22 +45,19 @@ static NSMutableDictionary *_cachedData = nil;
     return _cache;
 }
 
-+ (void)setDefaultCache:(NSCache *)cache
++ (void)setDefaultCache:(NSWritableCache *)cache
 {
     _cache = cache;
 }
 
 - (void)cacheImage
 {
+    if (!self.imageView.image)
+        return;
+    
     NSString *photoId = [self imageId];
-    
-    if (!_cachedData)
-        _cachedData = [NSMutableDictionary dictionary];
-    
+     
     NSData *imageData = UIImageJPEGRepresentation(self.imageView.image, 1.0);
-    
-    [_cachedData setObject:photoId 
-                    forKey:[NSNumber numberWithInteger:[imageData hash]]];
     
     [[ImageViewController defaultCache] setObject:imageData 
                                            forKey:photoId 
@@ -94,6 +85,9 @@ static NSMutableDictionary *_cachedData = nil;
     
     return imageId;
 }
+
+#pragma mark -
+#pragma mark Image view related stuff
 
 - (void)positionImage:(UIImage *)image 
      insideScrollview:(UIScrollView *)scrollView
@@ -189,7 +183,9 @@ static NSMutableDictionary *_cachedData = nil;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (!self.imageView.image && self.imageURL) [self loadImage];
+    
+    if (!self.imageView.image && self.imageURL) 
+        [self loadImage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -198,7 +194,7 @@ static NSMutableDictionary *_cachedData = nil;
     
     [self cacheImage];
     
-    self.imageURL = nil;
+    self.imageView.image = nil;
 }
  
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation 
@@ -218,9 +214,7 @@ static NSMutableDictionary *_cachedData = nil;
     
     NSLog(@"width = %g , height = %g",self.view.bounds.size.width,
           self.view.bounds.size.height);
-    
-    //[self loadImage];
-    //[self positionImage:self.imageView.image insideScrollview:self.scrollView];
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:

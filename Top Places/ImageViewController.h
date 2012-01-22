@@ -7,6 +7,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "NSWritableCache.h"
+
 @interface ImageViewController : UIViewController 
 <UIScrollViewDelegate, NSCacheDelegate>
 
@@ -14,7 +16,7 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
-+ (NSCache *)defaultCache;
-+ (void)setDefaultCache:(NSCache *)cache;
++ (NSWritableCache *)defaultCache;
++ (void)setDefaultCache:(NSWritableCache *)cache;
 
 @end

@@ -4,6 +4,16 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Fast Map Places Tests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>LogicTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>Top Places.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -13,6 +23,16 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>B7B0362914B9CB0C004EA3DE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B7D45C1D14C6FB78007AB41C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B7D45C3814C71800007AB41C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

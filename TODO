@@ -1,0 +1,9 @@
+TODO;
+
+1. Finish implementing currently semi-functional NSWritableCache class.
+2. iPad support.
+3. MapViewController is supposed to display geographic information: places and geotagged 
+Flickr photos.
+4. Fix the following ImageViewController bug: image view's positioning messes up when 
+ImageViewController is being re-displayed.
+
