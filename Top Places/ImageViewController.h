@@ -1,9 +1,5 @@
-//
-//  ImageViewController.h
-//
-//  Created by CS193p Instructor.
-//  Copyright (c) 2011 Stanford University. All rights reserved.
-//
+// Some code in this class was reused from Shutterbug. See:
+// https://www.stanford.edu/class/cs193p/cgi-bin/drupal/node/281
 
 #import <UIKit/UIKit.h>
 

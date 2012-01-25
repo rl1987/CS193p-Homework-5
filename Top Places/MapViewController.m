@@ -152,16 +152,20 @@ didDeselectAnnotationView:(MKAnnotationView *)view
 {
     [super viewDidLoad];
     
-    [self addPlaceAnnotations];
+    if (!self.locations)
+    {
+        dispatch_queue_t locationDownloadQ = 
+        dispatch_queue_create("location download queue", NULL);
+        
+        dispatch_async(locationDownloadQ, ^{
+            self.locations = [FlickrFetcher topPlaces];
+            
+            self.state = ST_LOCATIONS;
+        }); 
+    }
     
-//    dispatch_queue_t locationDownloadQ = 
-//    dispatch_queue_create("location download queue", NULL);
-//    
-//    dispatch_async(locationDownloadQ, ^{
-//        self.locations = [FlickrFetcher topPlaces];
-//        
-//        self.state = ST_LOCATIONS;
-//    });        
+    [self addPlaceAnnotations];     
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:

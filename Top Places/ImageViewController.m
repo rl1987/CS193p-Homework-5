@@ -1,10 +1,3 @@
-//
-//  ImageViewController.m
-//
-//  Created by CS193p Instructor.
-//  Copyright (c) 2011 Stanford University. All rights reserved.
-//
-
 #import "ImageViewController.h"
 
 static NSWritableCache *_cache = nil;
@@ -195,15 +188,6 @@ static NSWritableCache *_cache = nil;
     [self cacheImage];
     
     self.imageView.image = nil;
-}
- 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation 
-                                duration:(NSTimeInterval)duration
-{
-    NSLog(@"ImageViewController willRotateToInterfaceOrientation: duration:");
-    
-    NSLog(@"width = %g , height = %g",self.view.bounds.size.width,
-          self.view.bounds.size.height);
 }
 
 - (void)didRotateFromInterfaceOrientation:
