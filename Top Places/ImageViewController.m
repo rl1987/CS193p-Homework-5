@@ -8,7 +8,6 @@
 #import "ImageViewController.h"
 
 static NSWritableCache *_cache = nil;
-/* (Keys are hashes of cached data, objects are imaged IDs.) */
 
 @interface ImageViewController()
 
@@ -27,7 +26,7 @@ static NSWritableCache *_cache = nil;
 @synthesize spinner = _spinner;
      
 #pragma mark -
-#pragma mark Caching related arguments
+#pragma mark Caching related methods
 
 + (NSWritableCache *)defaultCache
 {
@@ -93,7 +92,7 @@ static NSWritableCache *_cache = nil;
      insideScrollview:(UIScrollView *)scrollView
 {
     self.imageView.image = image;
-    
+        
     CGSize imageSize = image.size;
     CGSize viewSize = scrollView.bounds.size;
     
@@ -102,12 +101,13 @@ static NSWritableCache *_cache = nil;
     
     scrollView.minimumZoomScale = MIN(xScale,yScale);
     
-    scrollView.contentSize = self.imageView.bounds.size; //imageSize;
+    scrollView.zoomScale = MAX(xScale,yScale);
     
     self.imageView.frame = 
-    CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
+    CGRectMake(0.0, 0.0, scrollView.zoomScale*imageSize.width, 
+               scrollView.zoomScale*imageSize.height);    
     
-    scrollView.zoomScale = MAX(xScale,yScale);
+    scrollView.contentSize = self.imageView.frame.size; //imageSize
     
     [scrollView flashScrollIndicators];
 
@@ -169,9 +169,9 @@ static NSWritableCache *_cache = nil;
 #pragma mark -
 #pragma mark View lifecycle
 
-- (void)awakeFromNib
+- (void)viewDidLoad
 {
-    [super awakeFromNib];
+    [super viewDidLoad];
     
     self.scrollView.delegate = self;
     
@@ -214,7 +214,8 @@ static NSWritableCache *_cache = nil;
     
     NSLog(@"width = %g , height = %g",self.view.bounds.size.width,
           self.view.bounds.size.height);
-
+    
+    [self positionImage:self.imageView.image insideScrollview:self.scrollView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:
