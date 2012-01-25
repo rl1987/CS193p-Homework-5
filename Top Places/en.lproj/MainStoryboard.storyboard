@@ -49,11 +49,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Recent photos" id="vRb-96-vV1">
-                        <barButtonItem key="rightBarButtonItem" title="Map" id="uqd-qD-kp1">
-                            <connections>
-                                <segue destination="rfi-IT-tij" kind="push" id="RX7-Zl-hKe"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="uqd-qD-kp1"/>
                     </navigationItem>
                 </tableViewController>
             </objects>
@@ -129,9 +125,13 @@
                         </connections>
                     </mapView>
                     <navigationItem key="navigationItem" id="2i0-s8-9JU"/>
+                    <connections>
+                        <outlet property="mapView" destination="Nne-sK-RbH" id="epk-8U-mQR"/>
+                        <segue destination="yhm-Fd-9no" kind="push" identifier="Map to image" id="EkO-wx-aBN"/>
+                    </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1791" y="-1167"/>
+            <point key="canvasLocation" x="1791" y="-1173"/>
         </scene>
         <scene sceneID="ZRV-Xh-Xl9">
             <objects>
@@ -317,22 +317,6 @@
             </objects>
             <point key="canvasLocation" x="1791" y="24"/>
         </scene>
-        <scene sceneID="3re-9X-9iv">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wfi-UG-REU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="rfi-IT-tij" customClass="MapViewController" sceneMemberID="viewController">
-                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="1MX-tc-ox7">
-                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <connections>
-                            <outlet property="delegate" destination="rfi-IT-tij" id="AgM-mf-G5f"/>
-                        </connections>
-                    </mapView>
-                    <navigationItem key="navigationItem" id="hdb-zp-z0D"/>
-                </viewController>
-            </objects>
-            <point key="canvasLocation" x="1791" y="642"/>
-        </scene>
     </scenes>
     <classes>
         <class className="ImageViewController" superclassName="UIViewController">
@@ -351,6 +335,9 @@
         </class>
         <class className="MapViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MapViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+            </relationships>
         </class>
         <class className="PhotoTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoTableViewController.h"/>
@@ -373,5 +360,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="ix0-bZ-LnB"/>
+        <segue reference="EkO-wx-aBN"/>
     </inferredMetricsTieBreakers>
 </document>

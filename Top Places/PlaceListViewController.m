@@ -29,11 +29,15 @@
 - (void)getTopLocations
 {
     
+    NSLog(@"PlaceListViewController getTopLocations");
+    
     dispatch_queue_t locationFetchingQueue = 
     dispatch_queue_create("location fetching queue", NULL);
     
     dispatch_async(locationFetchingQueue, ^{
         NSArray *fetchResults = [FlickrFetcher topPlaces];
+        
+        NSLog(@"%@",[fetchResults objectAtIndex:0]);
         
         NSMutableDictionary *places = [[NSMutableDictionary alloc] init];
         
@@ -151,15 +155,21 @@ titleForHeaderInSection:(NSInteger)section
     else if ([segue.destinationViewController 
               isKindOfClass:[MapViewController class]])
     {
-        // Do geographical stuff.
+        MapViewController *mvc = segue.destinationViewController;
+        
+        NSMutableArray *locations = [NSMutableArray array];
+        
+        for (id country in [self.places allKeys])
+            [locations addObjectsFromArray:[self.places objectForKey:country]];
+        
+        mvc.locations = locations;
     }  
     
-
 }
 
 - (void)viewDidUnload {
     [self setRefreshButton:nil];
-    [self setRefreshButton:nil];
+
     [super viewDidUnload];
 }
 
