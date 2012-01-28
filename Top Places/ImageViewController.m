@@ -91,13 +91,13 @@ static NSWritableCache *_cache = nil;
     
     scrollView.minimumZoomScale = MIN(xScale,yScale);
     
-    scrollView.zoomScale = MAX(xScale,yScale);
-    
     self.imageView.frame = 
     CGRectMake(0.0, 0.0, scrollView.zoomScale*imageSize.width, 
                scrollView.zoomScale*imageSize.height);    
     
-    scrollView.contentSize = self.imageView.frame.size; //imageSize
+    scrollView.contentSize = self.imageView.frame.size;
+    
+    scrollView.zoomScale = MAX(xScale,yScale);
     
     [scrollView flashScrollIndicators];
 
@@ -163,7 +163,7 @@ static NSWritableCache *_cache = nil;
     
     self.scrollView.delegate = self;
     
-    self.scrollView.maximumZoomScale = 1/[[UIScreen mainScreen] scale];
+    self.scrollView.maximumZoomScale = 1.0;
     
     [[ImageViewController defaultCache] setDelegate:self];
 }
@@ -188,12 +188,6 @@ static NSWritableCache *_cache = nil;
 - (void)didRotateFromInterfaceOrientation:
 (UIInterfaceOrientation)fromInterfaceOrientation
 {
-    
-//    NSLog(@"ImageViewController didRotateFromInterfaceOrientation:");
-//    
-//    NSLog(@"width = %g , height = %g",self.view.bounds.size.width,
-//          self.view.bounds.size.height);
-    
     [self positionImage:self.imageView.image insideScrollview:self.scrollView];
 }
 
