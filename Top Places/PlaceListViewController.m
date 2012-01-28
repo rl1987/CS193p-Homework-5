@@ -139,14 +139,16 @@ titleForHeaderInSection:(NSInteger)section
     if ([segue.destinationViewController 
          isKindOfClass:[LocationPhotoTableViewController class]])
     {
+        LocationPhotoTableViewController *dvc = segue.destinationViewController;
+        
         NSIndexPath *placeIndex = [self.tableView indexPathForCell:sender];
         
         NSDictionary *thePlace = [[self placesInCountry:[placeIndex section]] 
                                   objectAtIndex:[placeIndex row]];
         
-        [(LocationPhotoTableViewController *) segue.destinationViewController 
-         setPlace:thePlace];
+        [dvc setPlace:thePlace];
         
+        dvc.navigationItem.title = [[(UITableViewCell *)sender textLabel] text];        
     }
     else if ([segue.destinationViewController 
               isKindOfClass:[MapViewController class]])

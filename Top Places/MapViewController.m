@@ -18,12 +18,11 @@ typedef enum {
 @end
 
 @implementation MapViewController
+
 @synthesize mapView;
 
 @synthesize state = _state;
 @synthesize locations = _locations;
-
-#define MAX_PHOTOS 50
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -40,8 +39,13 @@ typedef enum {
         
         [(ImageViewController *)segue.destinationViewController 
          setImageURL:photoURL];
+        
+        [[(ImageViewController *)segue.destinationViewController navigationItem] 
+         setTitle:annotation.title];
     }
 }
+
+#define MAX_PHOTOS 50
 
 - (void)showLocation:(NSDictionary *)location
 {
@@ -125,14 +129,42 @@ typedef enum {
         
 }
 
+#define MAX_RECENT_PHOTOS 20
+
+- (void)addPhotoToRecents:(NSDictionary *)photo
+{
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableArray *recents = [[defaults arrayForKey:@"recents"] mutableCopy];
+    
+    if (!recents)
+        recents = [[NSMutableArray alloc] init];
+    
+    if ([recents indexOfObject:photo] == NSNotFound)
+        [recents insertObject:photo atIndex:0];
+    
+    if ([recents count] >= MAX_RECENT_PHOTOS)
+        [recents removeLastObject];
+    
+    [defaults setObject:[recents copy] forKey:@"recents"];
+    
+    [defaults synchronize];
+    
+}
+
 #pragma mark -
 #pragma mark Target-action stuff
 
 - (IBAction)photoCalloutButtonPressed:(UIButton *)sender
 {
+    
+    MKAnnotationView *av = (MKAnnotationView *)sender.superview.superview;
+    
     [self performSegueWithIdentifier:@"Map to image" 
-                              sender:sender.superview.superview];
-    // (We're passing the annotation view as sender.)
+                              sender:av];
+    
+    [self addPhotoToRecents:[(PhotoAnnotation *)av.annotation photo]];
 }
 
 - (IBAction)placeCalloutButtonPressed:(UIButton *)sender
@@ -145,6 +177,7 @@ typedef enum {
     NSAssert([annotation isKindOfClass:[PlaceAnnotation class]],@"ERROR: ...");
     
     [self showLocation:[(PlaceAnnotation *)annotation place]];
+    
 }
 
 #pragma mark -
