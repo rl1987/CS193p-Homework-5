@@ -28,17 +28,13 @@
 
 - (void)getTopLocations
 {
-    
-    NSLog(@"PlaceListViewController getTopLocations");
-    
+        
     dispatch_queue_t locationFetchingQueue = 
     dispatch_queue_create("location fetching queue", NULL);
     
     dispatch_async(locationFetchingQueue, ^{
         NSArray *fetchResults = [FlickrFetcher topPlaces];
-        
-        NSLog(@"%@",[fetchResults objectAtIndex:0]);
-        
+                
         NSMutableDictionary *places = [[NSMutableDictionary alloc] init];
         
         for (NSDictionary *f in fetchResults)

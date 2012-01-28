@@ -58,16 +58,29 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSDictionary *photo = [self.photos objectAtIndex:
+    
+    if ([segue.destinationViewController isKindOfClass:
+         [ImageViewController class]])
+    {
+        NSDictionary *photo = [self.photos objectAtIndex:
                            [[self.tableView indexPathForCell:sender] row]];
     
-    [self addPhotoToRecents:photo];
+        [self addPhotoToRecents:photo];
+    }
+    else if ([segue.destinationViewController isKindOfClass:
+              [MapViewController class]])
+    {
+        [(MapViewController *)segue.destinationViewController 
+         showLocation:self.place];
+    }
     
     [super prepareForSegue:segue sender:sender];
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload 
+{
     [self setMapButton:nil];
+    
     [super viewDidUnload];
 }
 

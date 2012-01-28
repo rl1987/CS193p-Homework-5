@@ -3,6 +3,8 @@
 
 @interface PlaceAnnotation : NSObject <MKAnnotation>
 
+@property (nonatomic,strong) NSDictionary *place;
+
 - (id)initWithPlace:(NSDictionary *)place;
 
 @end

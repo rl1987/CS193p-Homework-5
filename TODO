@@ -14,3 +14,4 @@ map view removes city pins and adds pins that are annotated with information
 about photos. Each annotation contains a button that allows one to view picture
 via ImageViewController.
 
+4. Fix initial zoom scale.

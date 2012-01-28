@@ -5,6 +5,7 @@
 @synthesize title = _title;
 @synthesize subtitle = _subtitle;
 @synthesize coordinate = _coordinate;
+@synthesize photo = _photo;
 
 - (id)initWithPhoto:(NSDictionary *)photo
 {
@@ -23,6 +24,8 @@
                                        doubleValue];
         
         _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        
+        _photo = photo;
     }
     
     return self;    

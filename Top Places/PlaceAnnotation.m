@@ -5,6 +5,7 @@
 @synthesize title = _title;
 @synthesize subtitle = _subtitle;
 @synthesize coordinate = _coordinate;
+@synthesize place = _place;
 
 - (id)initWithPlace:(NSDictionary *)place
 {
@@ -37,6 +38,7 @@
         
         _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
         
+        _place = place;        
     }
     
     return self;

@@ -12,6 +12,8 @@ typedef enum {
 @property (nonatomic, assign) MapVCState state;
 
 - (id<MKAnnotation>)annotationForPlace:(NSDictionary *)place;
+- (void)fetchLocations;
+- (void)addPlaceAnnotations;
 
 @end
 
@@ -21,9 +23,88 @@ typedef enum {
 @synthesize state = _state;
 @synthesize locations = _locations;
 
+#define MAX_PHOTOS 50
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Map to image"])
+    {
+        id<MKAnnotation> annotation = [(MKAnnotationView *)sender annotation];
+        
+        NSAssert([annotation isKindOfClass:[PhotoAnnotation class]],@"ERROR");
+        
+        NSDictionary *photo = [(PhotoAnnotation *)annotation photo];  
+        
+        NSURL *photoURL = [FlickrFetcher urlForPhoto:photo 
+                                              format:FlickrPhotoFormatLarge];
+        
+        [(ImageViewController *)segue.destinationViewController 
+         setImageURL:photoURL];
+    }
+}
+
+- (void)showLocation:(NSDictionary *)location
+{
+    
+    NSArray *photosinLocation = 
+    [FlickrFetcher photosInPlace:location maxResults:MAX_PHOTOS];
+    
+    CLLocationDegrees maxLatitude,minLatitude;
+    CLLocationDegrees maxLongitude,minLongitude;
+    
+    maxLatitude=minLatitude = [[location objectForKey:@"latitude"] doubleValue];
+    maxLongitude=minLongitude=[[location objectForKey:@"longitude"]doubleValue];
+    
+    for (NSDictionary *photo in photosinLocation)
+    {
+        [self.mapView addAnnotation:
+         [[PhotoAnnotation alloc] initWithPhoto:photo]];
+        
+        if (maxLatitude < [[photo objectForKey:@"latitude"] doubleValue])
+            maxLatitude = [[photo objectForKey:@"latitude"] doubleValue];
+        
+        if (minLatitude > [[photo objectForKey:@"latitude"] doubleValue])
+            minLatitude = [[photo objectForKey:@"latitude"] doubleValue];
+        
+        if (maxLongitude < [[photo objectForKey:@"longitude"] doubleValue])
+            maxLongitude = [[photo objectForKey:@"longitude"] doubleValue];
+        
+        if (minLongitude > [[photo objectForKey:@"longitude"] doubleValue])
+            minLongitude = [[photo objectForKey:@"longitude"] doubleValue];
+    }
+    
+    CLLocationCoordinate2D centerCoordinate = 
+    CLLocationCoordinate2DMake((maxLatitude+minLatitude)/2.0, 
+                               (maxLongitude+minLongitude)/2.0);
+    
+    MKCoordinateSpan span = MKCoordinateSpanMake(maxLatitude-minLatitude, 
+                                                 maxLongitude-minLongitude);
+        
+    self.mapView.region = MKCoordinateRegionMake(centerCoordinate, span);
+    
+    self.state = ST_PHOTOS;
+}
+
+- (void)showCoordinateRegion:(MKCoordinateRegion)region
+{
+    self.mapView.region = region;
+}
+
+- (void)fetchLocations
+{
+
+    self.locations = [FlickrFetcher topPlaces];
+
+}
+
 - (id<MKAnnotation>)annotationForPlace:(NSDictionary *)place
 {
     return [[PlaceAnnotation alloc] initWithPlace:place];
+}
+
+- (id<MKAnnotation>)annotationForPhoto:(NSDictionary *)photo
+{
+    return [[PhotoAnnotation alloc] initWithPhoto:photo];
 }
 
 - (void)addPlaceAnnotations
@@ -32,7 +113,7 @@ typedef enum {
         return;
     
     for (NSDictionary *place in self.locations)
-            [self.mapView addAnnotation:[self annotationForPlace:place]];
+        [self.mapView addAnnotation:[self annotationForPlace:place]];
 }
 
 - (void)setState:(MapVCState)state
@@ -41,17 +122,29 @@ typedef enum {
         return;
     
     _state = state;
+        
+}
+
+#pragma mark -
+#pragma mark Target-action stuff
+
+- (IBAction)photoCalloutButtonPressed:(UIButton *)sender
+{
+    [self performSegueWithIdentifier:@"Map to image" 
+                              sender:sender.superview.superview];
+    // (We're passing the annotation view as sender.)
+}
+
+- (IBAction)placeCalloutButtonPressed:(UIButton *)sender
+{
+    NSLog(@"MapViewController placeCalloutButtonPressed:");
     
-    [self.mapView removeAnnotations:[self.mapView annotations]];
+    id<MKAnnotation> annotation = 
+    [(MKAnnotationView *)sender.superview.superview annotation];
     
-    if (state == ST_LOCATIONS)
-    {
-        [self addPlaceAnnotations];
-    }
-    else
-    {
-        // ...
-    }
+    NSAssert([annotation isKindOfClass:[PlaceAnnotation class]],@"ERROR: ...");
+    
+    [self showLocation:[(PlaceAnnotation *)annotation place]];
 }
 
 #pragma mark -
@@ -59,7 +152,7 @@ typedef enum {
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animate
 {
-    
+
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
@@ -67,9 +160,29 @@ typedef enum {
 
     if (MAX(self.mapView.region.span.latitudeDelta,
             self.mapView.region.span.longitudeDelta) > ZOOM_THRESHOLD) 
+    {
+        if (self.state == ST_PHOTOS)
+        {
+            [self.mapView removeAnnotations:self.mapView.annotations];
+            
+            [self addPlaceAnnotations];
+        }
+        
         self.state = ST_LOCATIONS;
+
+    }
     else
+    {
+        if (self.state == ST_LOCATIONS)
+        {
+            [self.mapView removeAnnotations:self.mapView.annotations];
+            
+            // Add photo pins.
+            
+        }
+        
         self.state = ST_PHOTOS;
+    }
     
 }
 
@@ -90,6 +203,7 @@ typedef enum {
 
 #define PLACE_PIN @"Place annotation"
 #define PHOTO_PIN @"Photo annotation"
+#define THUMBNAIL_FRAME CGRectMake(0.0, 0.0, 32.0, 32.0)
 
 // mapView:viewForAnnotation: provides the view for each annotation.
 // This method may be called for all or some of the added annotations.
@@ -108,6 +222,15 @@ typedef enum {
         {
             pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation 
                                                   reuseIdentifier:PLACE_PIN];
+                        
+            UIButton *calloutButton = 
+            [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            
+            [calloutButton addTarget:self 
+                              action:@selector(placeCalloutButtonPressed:) 
+                    forControlEvents:UIControlEventTouchUpInside];
+            
+            pin.rightCalloutAccessoryView = calloutButton;
             
             pin.canShowCallout = YES;
             pin.enabled = YES;
@@ -119,6 +242,28 @@ typedef enum {
     }
     else if ([annotation isKindOfClass:[PhotoAnnotation class]])
     {
+        pin=[self.mapView dequeueReusableAnnotationViewWithIdentifier:PHOTO_PIN];
+        
+        if (!pin)
+        {
+            pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation 
+                                                  reuseIdentifier:PHOTO_PIN];
+            
+            UIButton *calloutButton = 
+            [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            
+            [calloutButton addTarget:self 
+                              action:@selector(photoCalloutButtonPressed:) 
+                    forControlEvents:UIControlEventTouchUpInside];
+            
+            pin.rightCalloutAccessoryView = calloutButton;
+            
+            pin.leftCalloutAccessoryView = 
+            [[UIImageView alloc] initWithFrame:THUMBNAIL_FRAME];
+            
+            pin.canShowCallout = YES;
+            pin.enabled = YES;
+        }
         
     }
     
@@ -136,6 +281,31 @@ typedef enum {
 - (void)mapView:(MKMapView *)mapView 
 didSelectAnnotationView:(MKAnnotationView *)view 
 {
+    
+    if ([view.annotation isKindOfClass:[PhotoAnnotation class]])
+    {
+        UIImageView *thumbnailView=(UIImageView*)view.leftCalloutAccessoryView;
+        
+        dispatch_queue_t thumbnailDownloadQ = 
+        dispatch_queue_create("thumbnail download queue", 0);
+        
+        dispatch_async(thumbnailDownloadQ, ^{
+            NSDictionary *photo = 
+            [(PhotoAnnotation *) view.annotation photo];
+            
+            NSURL *thumbnailURL = 
+            [FlickrFetcher urlForPhoto:photo 
+                                format:FlickrPhotoFormatSquare];
+            
+            UIImage *thumbnail = 
+            [UIImage imageWithData:[NSData dataWithContentsOfURL:thumbnailURL]];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                thumbnailView.image = thumbnail;
+            });
+        });
+        
+    }
     
 }
 
@@ -160,12 +330,14 @@ didDeselectAnnotationView:(MKAnnotationView *)view
         dispatch_async(locationDownloadQ, ^{
             self.locations = [FlickrFetcher topPlaces];
             
-            self.state = ST_LOCATIONS;
-        }); 
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self addPlaceAnnotations];
+            });
+        });
+        
+        dispatch_release(locationDownloadQ);
     }
-    
-    [self addPlaceAnnotations];     
-    
+        
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:
@@ -181,4 +353,5 @@ didDeselectAnnotationView:(MKAnnotationView *)view
     
     [super viewDidUnload];
 }
+
 @end

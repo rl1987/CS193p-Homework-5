@@ -72,9 +72,6 @@ static NSWritableCache *_cache = nil;
                        objectAtIndex:0];
     }
     
-    NSLog(@"ImageViewController imageId");
-    NSLog(@"%@",imageId);
-    
     return imageId;
 }
 
@@ -146,8 +143,6 @@ static NSWritableCache *_cache = nil;
 
 - (void)setImageURL:(NSURL *)imageURL
 {
-    NSLog(@"ImageViewController setImageURL:");
-    NSLog(@"%@",imageURL);
     
     if (![_imageURL isEqual:imageURL]) {
         _imageURL = imageURL;
@@ -194,10 +189,10 @@ static NSWritableCache *_cache = nil;
 (UIInterfaceOrientation)fromInterfaceOrientation
 {
     
-    NSLog(@"ImageViewController didRotateFromInterfaceOrientation:");
-    
-    NSLog(@"width = %g , height = %g",self.view.bounds.size.width,
-          self.view.bounds.size.height);
+//    NSLog(@"ImageViewController didRotateFromInterfaceOrientation:");
+//    
+//    NSLog(@"width = %g , height = %g",self.view.bounds.size.width,
+//          self.view.bounds.size.height);
     
     [self positionImage:self.imageView.image insideScrollview:self.scrollView];
 }
