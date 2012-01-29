@@ -178,7 +178,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Map" id="TAD-wE-CVJ">
                             <connections>
                                 <action selector="mapPressed:" destination="huA-gw-HdO" id="cPA-RO-R3d"/>
-                                <segue destination="JIe-ni-LTf" kind="push" id="aWd-0y-uuC"/>
+                                <segue destination="JIe-ni-LTf" kind="push" identifier="Photo list to map" id="aWd-0y-uuC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
