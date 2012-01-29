@@ -265,14 +265,13 @@ typedef enum {
             
             for (NSDictionary *vp in visiblePlaces)
                 [self addPhotoAnnotationsForPlace:vp];
-            
-            self.mapView.scrollEnabled = YES;
-            self.mapView.zoomEnabled = YES;
         }
         
         self.state = ST_PHOTOS;
     }
     
+    self.mapView.scrollEnabled = YES;
+    self.mapView.zoomEnabled = YES;
 }
 
 #define PLACE_PIN @"Place annotation"

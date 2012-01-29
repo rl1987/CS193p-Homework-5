@@ -15,6 +15,10 @@
     if (self)
     {
         _title = [photo objectForKey:@"title"];
+        
+        if ([_title length]==0)
+            _title = @"Unknown";
+        
         _subtitle = [photo valueForKeyPath:@"description._content"];
         
         CLLocationDegrees latitude = [[photo objectForKey:@"latitude"] 
