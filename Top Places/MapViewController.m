@@ -6,12 +6,15 @@
 
 typedef enum {
     ST_LOCATIONS,
-    ST_PHOTOS
+    ST_PHOTOS,
+    ST_TRANSIENT
 } MapVCState;
 
 @property (nonatomic, assign) MapVCState state;
 
 - (id<MKAnnotation>)annotationForPlace:(NSDictionary *)place;
+- (NSArray *)placesFittingToCoordinateRegion:(MKCoordinateRegion)region;
+- (void)addPhotoAnnotationsForPlace:(NSDictionary *)place;
 - (void)fetchLocations;
 - (void)addPlaceAnnotations;
 
@@ -111,6 +114,44 @@ typedef enum {
     return [[PhotoAnnotation alloc] initWithPhoto:photo];
 }
 
+- (NSArray *)placesFittingToCoordinateRegion:(MKCoordinateRegion)region
+{
+    NSMutableArray *placesThatFit = [[NSMutableArray alloc] init];
+    
+    CLLocationDegrees maxLatitude = 
+    region.center.latitude + region.span.latitudeDelta/2.0;
+    CLLocationDegrees minLatitude = 
+    region.center.latitude - region.span.latitudeDelta/2.0;
+    CLLocationDegrees maxLongitude = 
+    region.center.longitude + region.span.longitudeDelta/2.0;
+    CLLocationDegrees minLongitude = 
+    region.center.longitude - region.span.longitudeDelta/2.0;
+    
+    for (NSDictionary *place in self.locations)
+    {
+        CLLocationDegrees latitude = [[place objectForKey:@"latitude"] 
+                                      doubleValue];
+        CLLocationDegrees longitude = [[place objectForKey:@"longitude"] 
+                                       doubleValue];
+        
+        if ( (latitude < maxLatitude) && (latitude > minLatitude) &&
+             (longitude < maxLongitude) && (longitude > minLongitude) )
+            [placesThatFit addObject:place];
+    }
+    
+    return [placesThatFit copy];
+}
+
+- (void)addPhotoAnnotationsForPlace:(NSDictionary *)place
+{
+    NSArray *photos = [FlickrFetcher photosInPlace:place maxResults:MAX_PHOTOS];
+    
+    for (NSDictionary *photo in photos)
+        [self.mapView addAnnotation:
+         [[PhotoAnnotation alloc] initWithPhoto:photo]];
+}
+
+
 - (void)addPlaceAnnotations
 {
     if (!self.locations)
@@ -128,7 +169,7 @@ typedef enum {
     _state = state;
         
 }
-
+                       
 #define MAX_RECENT_PHOTOS 20
 
 - (void)addPhotoToRecents:(NSDictionary *)photo
@@ -171,22 +212,17 @@ typedef enum {
 {
     NSLog(@"MapViewController placeCalloutButtonPressed:");
     
-    id<MKAnnotation> annotation = 
-    [(MKAnnotationView *)sender.superview.superview annotation];
-    
-    NSAssert([annotation isKindOfClass:[PlaceAnnotation class]],@"ERROR: ...");
-    
-    [self showLocation:[(PlaceAnnotation *)annotation place]];
+//    id<MKAnnotation> annotation = 
+//    [(MKAnnotationView *)sender.superview.superview annotation];
+//    
+//    NSAssert([annotation isKindOfClass:[PlaceAnnotation class]],@"ERROR: ...");
+//    
+//    [self showLocation:[(PlaceAnnotation *)annotation place]];
     
 }
 
 #pragma mark -
 #pragma mark Map view delegate
-
-- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animate
-{
-
-}
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
@@ -206,31 +242,20 @@ typedef enum {
     }
     else
     {
-        if (self.state == ST_LOCATIONS)
+        if ((self.state == ST_LOCATIONS) || (self.state == ST_TRANSIENT))
         {
             [self.mapView removeAnnotations:self.mapView.annotations];
             
-            // Add photo pins.
+            NSArray *visiblePlaces = 
+            [self placesFittingToCoordinateRegion:self.mapView.region];
+            
+            for (NSDictionary *vp in visiblePlaces)
+                [self addPhotoAnnotationsForPlace:vp];
             
         }
         
         self.state = ST_PHOTOS;
     }
-    
-}
-
-- (void)mapViewWillStartLoadingMap:(MKMapView *)mapView
-{
-    
-}
-
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView
-{
-    
-}
-
-- (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error
-{
     
 }
 
@@ -303,14 +328,6 @@ typedef enum {
     return pin;
 }
 
-// mapView:annotationView:calloutAccessoryControlTapped: is called when 
-// the user taps on left & right callout accessory UIControls.
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view 
-                      calloutAccessoryControlTapped:(UIControl *)control
-{
-    
-}
-
 - (void)mapView:(MKMapView *)mapView 
 didSelectAnnotationView:(MKAnnotationView *)view 
 {
@@ -342,12 +359,6 @@ didSelectAnnotationView:(MKAnnotationView *)view
     
 }
 
-- (void)mapView:(MKMapView *)mapView 
-didDeselectAnnotationView:(MKAnnotationView *)view
-{
-    
-}
-
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -358,7 +369,7 @@ didDeselectAnnotationView:(MKAnnotationView *)view
     if (!self.locations)
     {
         dispatch_queue_t locationDownloadQ = 
-        dispatch_queue_create("location download queue", NULL);
+        dispatch_queue_create("location download queue", 0);
         
         dispatch_async(locationDownloadQ, ^{
             self.locations = [FlickrFetcher topPlaces];
@@ -370,7 +381,9 @@ didDeselectAnnotationView:(MKAnnotationView *)view
         
         dispatch_release(locationDownloadQ);
     }
-        
+    else
+        [self addPlaceAnnotations];
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:
