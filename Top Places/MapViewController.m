@@ -53,41 +53,7 @@ typedef enum {
 - (void)showLocation:(NSDictionary *)location
 {
     
-    NSArray *photosinLocation = 
-    [FlickrFetcher photosInPlace:location maxResults:MAX_PHOTOS];
     
-    CLLocationDegrees maxLatitude,minLatitude;
-    CLLocationDegrees maxLongitude,minLongitude;
-    
-    maxLatitude=minLatitude = [[location objectForKey:@"latitude"] doubleValue];
-    maxLongitude=minLongitude=[[location objectForKey:@"longitude"]doubleValue];
-    
-    for (NSDictionary *photo in photosinLocation)
-    {
-        [self.mapView addAnnotation:
-         [[PhotoAnnotation alloc] initWithPhoto:photo]];
-        
-        if (maxLatitude < [[photo objectForKey:@"latitude"] doubleValue])
-            maxLatitude = [[photo objectForKey:@"latitude"] doubleValue];
-        
-        if (minLatitude > [[photo objectForKey:@"latitude"] doubleValue])
-            minLatitude = [[photo objectForKey:@"latitude"] doubleValue];
-        
-        if (maxLongitude < [[photo objectForKey:@"longitude"] doubleValue])
-            maxLongitude = [[photo objectForKey:@"longitude"] doubleValue];
-        
-        if (minLongitude > [[photo objectForKey:@"longitude"] doubleValue])
-            minLongitude = [[photo objectForKey:@"longitude"] doubleValue];
-    }
-    
-    CLLocationCoordinate2D centerCoordinate = 
-    CLLocationCoordinate2DMake((maxLatitude+minLatitude)/2.0, 
-                               (maxLongitude+minLongitude)/2.0);
-    
-    MKCoordinateSpan span = MKCoordinateSpanMake(maxLatitude-minLatitude, 
-                                                 maxLongitude-minLongitude);
-        
-    self.mapView.region = MKCoordinateRegionMake(centerCoordinate, span);
     
     self.state = ST_PHOTOS;
 }
@@ -211,11 +177,65 @@ typedef enum {
 - (IBAction)placeCalloutButtonPressed:(UIButton *)sender
 {
     NSLog(@"MapViewController placeCalloutButtonPressed:");
+       
+    PlaceAnnotation *annotation = 
+    [(MKAnnotationView *)sender.superview.superview annotation];
     
-//    id<MKAnnotation> annotation = 
-//    [(MKAnnotationView *)sender.superview.superview annotation];
-//    
-//    NSAssert([annotation isKindOfClass:[PlaceAnnotation class]],@"ERROR: ...");
+    NSAssert([annotation isKindOfClass:[PlaceAnnotation class]],@"ERROR: ...");
+    
+    dispatch_queue_t q = dispatch_queue_create("photo dict download queue", 0);
+    
+    dispatch_async(q, ^{
+        NSDictionary *location = annotation.place;
+        
+        NSArray *photosinLocation = 
+        [FlickrFetcher photosInPlace:location maxResults:MAX_PHOTOS];
+        
+        CLLocationDegrees maxLatitude,minLatitude;
+        CLLocationDegrees maxLongitude,minLongitude;
+        
+        maxLatitude=minLatitude = [[location objectForKey:@"latitude"] doubleValue];
+        maxLongitude=minLongitude=[[location objectForKey:@"longitude"]doubleValue];
+        
+        for (NSDictionary *photo in photosinLocation)
+        {
+            [self.mapView addAnnotation:
+             [[PhotoAnnotation alloc] initWithPhoto:photo]];
+            
+            if (maxLatitude < [[photo objectForKey:@"latitude"] doubleValue])
+                maxLatitude = [[photo objectForKey:@"latitude"] doubleValue];
+            
+            if (minLatitude > [[photo objectForKey:@"latitude"] doubleValue])
+                minLatitude = [[photo objectForKey:@"latitude"] doubleValue];
+            
+            if (maxLongitude < [[photo objectForKey:@"longitude"] doubleValue])
+                maxLongitude = [[photo objectForKey:@"longitude"] doubleValue];
+            
+            if (minLongitude > [[photo objectForKey:@"longitude"] doubleValue])
+                minLongitude = [[photo objectForKey:@"longitude"] doubleValue];
+        }
+        
+        CLLocationCoordinate2D centerCoordinate = 
+        CLLocationCoordinate2DMake((maxLatitude+minLatitude)/2.0, 
+                                   (maxLongitude+minLongitude)/2.0);
+        
+        MKCoordinateSpan span = MKCoordinateSpanMake(maxLatitude-minLatitude, 
+                                                     maxLongitude-minLongitude);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.state = ST_TRANSIENT;
+            self.mapView.scrollEnabled = NO;
+            self.mapView.zoomEnabled = NO;
+            
+            //self.mapView.region = MKCoordinateRegionMake(centerCoordinate, span);
+            
+            [self.mapView setRegion:MKCoordinateRegionMake(centerCoordinate,span) 
+                           animated:YES];
+        });
+        
+        dispatch_release(q);    
+    
+    });
 //    
 //    [self showLocation:[(PlaceAnnotation *)annotation place]];
     
@@ -252,6 +272,8 @@ typedef enum {
             for (NSDictionary *vp in visiblePlaces)
                 [self addPhotoAnnotationsForPlace:vp];
             
+            self.mapView.scrollEnabled = YES;
+            self.mapView.zoomEnabled = YES;
         }
         
         self.state = ST_PHOTOS;
@@ -357,6 +379,12 @@ didSelectAnnotationView:(MKAnnotationView *)view
         
     }
     
+}
+
+- (void)mapView:(MKMapView *)mapView 
+didDeselectAnnotationView:(MKAnnotationView *)view
+{
+    [(UIImageView *)view.leftCalloutAccessoryView setImage:nil];
 }
 
 #pragma mark -
