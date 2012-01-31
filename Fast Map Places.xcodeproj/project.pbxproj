@@ -26,14 +26,12 @@
 		B7D0D7E814BF555600DF8B4C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0D7E714BF555300DF8B4C /* MapViewController.m */; };
 		B7D0D7EB14BF590600DF8B4C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D0D7EA14BF590600DF8B4C /* MapKit.framework */; };
 		B7D0D7ED14BF590D00DF8B4C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D0D7EC14BF590D00DF8B4C /* CoreLocation.framework */; };
-		B7D45C1414C6D02E007AB41C /* NSWritableCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D45C1314C6D02E007AB41C /* NSWritableCache.m */; };
 		B7D45C3B14C71800007AB41C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B0362E14B9CB0C004EA3DE /* UIKit.framework */; };
 		B7D45C3C14C71800007AB41C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B0363014B9CB0C004EA3DE /* Foundation.framework */; };
 		B7D45C3D14C71800007AB41C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B0363214B9CB0C004EA3DE /* CoreGraphics.framework */; };
 		B7D45C4314C71801007AB41C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B7D45C4114C71801007AB41C /* InfoPlist.strings */; };
 		B7D45C4614C71801007AB41C /* LogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D45C4514C71801007AB41C /* LogicTests.m */; };
 		B7D45C4F14C71AE0007AB41C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D45C4E14C71AE0007AB41C /* SenTestingKit.framework */; };
-		B7D45C5114C71F19007AB41C /* NSWritableCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D45C1314C6D02E007AB41C /* NSWritableCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,8 +68,6 @@
 		B7D0D7E714BF555300DF8B4C /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		B7D0D7EA14BF590600DF8B4C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		B7D0D7EC14BF590D00DF8B4C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		B7D45C1214C6D02E007AB41C /* NSWritableCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSWritableCache.h; sourceTree = "<group>"; };
-		B7D45C1314C6D02E007AB41C /* NSWritableCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSWritableCache.m; sourceTree = "<group>"; };
 		B7D45C3914C71800007AB41C /* LogicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LogicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7D45C4014C71801007AB41C /* LogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LogicTests-Info.plist"; sourceTree = "<group>"; };
 		B7D45C4214C71801007AB41C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -168,8 +164,6 @@
 				B77E69DD14BDCA2500199D1C /* RecentPhotoTableViewController.m */,
 				B7B0366414BA1556004EA3DE /* ImageViewController.h */,
 				B7B0366514BA1557004EA3DE /* ImageViewController.m */,
-				B7D45C1214C6D02E007AB41C /* NSWritableCache.h */,
-				B7D45C1314C6D02E007AB41C /* NSWritableCache.m */,
 				B7B0363514B9CB0C004EA3DE /* Supporting Files */,
 			);
 			path = "Top Places";
@@ -335,7 +329,6 @@
 				B77E69DE14BDCA2600199D1C /* RecentPhotoTableViewController.m in Sources */,
 				B7D0D7D414BEE3B500DF8B4C /* LocationPhotoTableViewController.m in Sources */,
 				B7D0D7E814BF555600DF8B4C /* MapViewController.m in Sources */,
-				B7D45C1414C6D02E007AB41C /* NSWritableCache.m in Sources */,
 				B74468F014D0596200154F9E /* PlaceAnnotation.m in Sources */,
 				B74468F414D059C600154F9E /* PhotoAnnotation.m in Sources */,
 			);
@@ -345,7 +338,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B7D45C5114C71F19007AB41C /* NSWritableCache.m in Sources */,
 				B7D45C4614C71801007AB41C /* LogicTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

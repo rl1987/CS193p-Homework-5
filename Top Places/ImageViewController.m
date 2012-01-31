@@ -1,6 +1,6 @@
 #import "ImageViewController.h"
 
-static NSWritableCache *_cache = nil;
+static NSCache *_cache = nil;
 
 @interface ImageViewController()
 
@@ -22,13 +22,15 @@ static NSWritableCache *_cache = nil;
 #pragma mark -
 #pragma mark Caching related methods
 
-+ (NSWritableCache *)defaultCache
+#define CACHE_COST_LIMIT 10*1024*1024 // 10 MB
+
++ (NSCache *)defaultCache
 {
     if (_cache == nil)
     {
-        _cache = [[NSWritableCache alloc] init];
+        _cache = [[NSCache alloc] init];
         
-        [_cache setTotalCostLimit:10*1024*1024]; // 10 MB
+        [_cache setTotalCostLimit:CACHE_COST_LIMIT]; 
         
         [_cache setCountLimit:0]; // Number of cached photos is
                                   // unlimited, as long as they
@@ -38,7 +40,7 @@ static NSWritableCache *_cache = nil;
     return _cache;
 }
 
-+ (void)setDefaultCache:(NSWritableCache *)cache
++ (void)setDefaultCache:(NSCache *)cache
 {
     _cache = cache;
 }
@@ -49,12 +51,29 @@ static NSWritableCache *_cache = nil;
         return;
     
     NSString *photoId = [self imageId];
-     
+    
     NSData *imageData = UIImageJPEGRepresentation(self.imageView.image, 1.0);
     
     [[ImageViewController defaultCache] setObject:imageData 
                                            forKey:photoId 
                                              cost:[imageData length]];
+    
+    NSFileManager *fileman = [NSFileManager defaultManager];
+    
+    NSString *cacheDirectoryPath = 
+    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                         NSUserDomainMask, 
+                                         YES) objectAtIndex:0];
+    
+    NSString *filePath = 
+    [cacheDirectoryPath stringByAppendingPathComponent:
+     [photoId stringByAppendingString:@".jpg"]];
+    
+    [fileman createFileAtPath:filePath 
+                     contents:imageData
+                   attributes:nil];       
+    
+    
 }
 
 - (NSString *)imageId
@@ -118,13 +137,29 @@ static NSWritableCache *_cache = nil;
     [self.spinner startAnimating];
     
     dispatch_queue_t imageDownloadQ = 
-    dispatch_queue_create("ShutterbugViewController image downloader", NULL);
+    dispatch_queue_create("image download", NULL);
     
     dispatch_async(imageDownloadQ, ^{
         UIImage *image;
         
         NSData *cachedData = 
         [[ImageViewController defaultCache] objectForKey:[self imageId]];
+        
+        if (!cachedData)
+        {
+            NSFileManager *fileman = [NSFileManager defaultManager];
+            
+            NSString *cacheDirectoryPath = 
+            [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                 NSUserDomainMask, 
+                                                 YES) objectAtIndex:0];
+            
+            NSString *filePath = 
+            [cacheDirectoryPath stringByAppendingPathComponent:
+             [[self imageId] stringByAppendingString:@".jpg"]];
+            
+            cachedData = [fileman contentsAtPath:filePath];
+        }
         
         if (cachedData)
             image = [UIImage imageWithData:cachedData];
@@ -177,17 +212,6 @@ static NSWritableCache *_cache = nil;
     [self.toolbar setItems:nil animated:YES];
 }
 
-/*
-// Called when the view controller is shown in a popover so the delegate can
-// take action like hiding other popovers.
-- (void)splitViewController:(UISplitViewController*)svc 
-          popoverController:(UIPopoverController*)pc 
-  willPresentViewController:(UIViewController *)aViewController
-{
-    
-}
-*/
-
 // Returns YES if a view controller should be hidden by the split view 
 // controller in a given orientation. (This method is only called on the 
 // leftmost view controller and only discriminates portrait from landscape.)
@@ -205,6 +229,8 @@ static NSWritableCache *_cache = nil;
 {
     if (self.splitViewController)
         self.splitViewController.delegate = self;
+    
+    //[[ImageViewController defaultCache] readFromDisk];
 }
 
 - (void)viewDidLoad
@@ -248,6 +274,7 @@ static NSWritableCache *_cache = nil;
 
 - (void)viewDidUnload
 {
+
     self.imageView = nil;
     [self setScrollView:nil];
     [self setSpinner:nil];

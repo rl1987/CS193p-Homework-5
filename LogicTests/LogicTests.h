@@ -1,10 +1,10 @@
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "NSWritableCache.h"
+#import "WritableCache.h"
 
 @interface LogicTests : SenTestCase
 {
-    NSWritableCache *cache;
+    WritableCache *cache;
 }
 
 @end

@@ -3,8 +3,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "NSWritableCache.h"
-
 @interface ImageViewController : UIViewController 
 <UIScrollViewDelegate, UISplitViewControllerDelegate>
 
@@ -13,7 +11,7 @@
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 
-+ (NSWritableCache *)defaultCache;
-+ (void)setDefaultCache:(NSWritableCache *)cache;
++ (NSCache *)defaultCache;
++ (void)setDefaultCache:(NSCache *)cache;
 
 @end

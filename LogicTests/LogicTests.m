@@ -6,7 +6,7 @@
 {
     [super setUp];
 
-    cache = [[NSWritableCache alloc] init];
+    cache = [[WritableCache alloc] init];
     
 }
 
@@ -77,7 +77,7 @@
     
     STAssertTrue(success, @"file writing failure");
     
-    NSWritableCache *cache2 = 
+    WritableCache *cache2 = 
     [NSKeyedUnarchiver unarchiveObjectWithFile:[self cacheFilePath]];
     
     STAssertNotNil(cache2, @"failed to read cache file");
