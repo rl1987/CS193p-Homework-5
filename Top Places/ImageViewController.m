@@ -17,6 +17,7 @@ static NSWritableCache *_cache = nil;
 @synthesize imageURL = _imageURL;
 @synthesize scrollView = _scrollView;
 @synthesize spinner = _spinner;
+@synthesize toolbar = _toolbar;
      
 #pragma mark -
 #pragma mark Caching related methods
@@ -155,7 +156,56 @@ static NSWritableCache *_cache = nil;
 }
 
 #pragma mark -
+#pragma mark Split view controller delegate
+
+//Called when a button should be added to a toolbar for a hidden view controller
+- (void)splitViewController: (UISplitViewController*)svc 
+     willHideViewController:(UIViewController *)aViewController 
+          withBarButtonItem:(UIBarButtonItem*)barButtonItem 
+       forPopoverController: (UIPopoverController*)pc
+{
+    [self.toolbar setItems:[NSArray arrayWithObject:barButtonItem] 
+                  animated:YES];
+}
+
+// Called when the view is shown again in the split view, invalidating the 
+// button and popover controller
+- (void)splitViewController: (UISplitViewController*)svc 
+     willShowViewController:(UIViewController *)aViewController 
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+    [self.toolbar setItems:nil animated:YES];
+}
+
+/*
+// Called when the view controller is shown in a popover so the delegate can
+// take action like hiding other popovers.
+- (void)splitViewController:(UISplitViewController*)svc 
+          popoverController:(UIPopoverController*)pc 
+  willPresentViewController:(UIViewController *)aViewController
+{
+    
+}
+*/
+
+// Returns YES if a view controller should be hidden by the split view 
+// controller in a given orientation. (This method is only called on the 
+// leftmost view controller and only discriminates portrait from landscape.)
+- (BOOL)splitViewController: (UISplitViewController*)svc 
+   shouldHideViewController:(UIViewController *)vc 
+              inOrientation:(UIInterfaceOrientation)orientation  
+{
+    return UIInterfaceOrientationIsPortrait(orientation);
+}
+
+#pragma mark -
 #pragma mark View lifecycle
+
+- (void)awakeFromNib
+{
+    if (self.splitViewController)
+        self.splitViewController.delegate = self;
+}
 
 - (void)viewDidLoad
 {
@@ -165,7 +215,6 @@ static NSWritableCache *_cache = nil;
     
     self.scrollView.maximumZoomScale = 1.0;
     
-    [[ImageViewController defaultCache] setDelegate:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -203,6 +252,7 @@ static NSWritableCache *_cache = nil;
     [self setScrollView:nil];
     [self setSpinner:nil];
     
+    [self setToolbar:nil];
     [super viewDidUnload];
 }
 

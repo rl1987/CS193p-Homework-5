@@ -6,11 +6,12 @@
 #import "NSWritableCache.h"
 
 @interface ImageViewController : UIViewController 
-<UIScrollViewDelegate, NSCacheDelegate>
+<UIScrollViewDelegate, UISplitViewControllerDelegate>
 
 @property (nonatomic, strong) NSURL *imageURL;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 
 + (NSWritableCache *)defaultCache;
 + (void)setDefaultCache:(NSWritableCache *)cache;

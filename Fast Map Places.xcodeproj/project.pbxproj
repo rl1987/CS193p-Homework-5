@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B74468F014D0596200154F9E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = B74468EF14D0596100154F9E /* PlaceAnnotation.m */; };
 		B74468F414D059C600154F9E /* PhotoAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = B74468F314D059C200154F9E /* PhotoAnnotation.m */; };
+		B74468F614D59C6E00154F9E /* ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B74468F514D59C6C00154F9E /* ipad.storyboard */; };
 		B77E69DE14BDCA2600199D1C /* RecentPhotoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77E69DD14BDCA2500199D1C /* RecentPhotoTableViewController.m */; };
 		B7B0362F14B9CB0C004EA3DE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B0362E14B9CB0C004EA3DE /* UIKit.framework */; };
 		B7B0363114B9CB0C004EA3DE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B0363014B9CB0C004EA3DE /* Foundation.framework */; };
@@ -40,6 +41,7 @@
 		B74468EF14D0596100154F9E /* PlaceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceAnnotation.m; sourceTree = "<group>"; };
 		B74468F214D059C200154F9E /* PhotoAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAnnotation.h; sourceTree = "<group>"; };
 		B74468F314D059C200154F9E /* PhotoAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAnnotation.m; sourceTree = "<group>"; };
+		B74468F514D59C6C00154F9E /* ipad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ipad.storyboard; sourceTree = "<group>"; };
 		B77E69DC14BDCA2500199D1C /* RecentPhotoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentPhotoTableViewController.h; sourceTree = "<group>"; };
 		B77E69DD14BDCA2500199D1C /* RecentPhotoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentPhotoTableViewController.m; sourceTree = "<group>"; };
 		B7B0362A14B9CB0C004EA3DE /* Fast Map Places.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fast Map Places.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				B7B0364014B9CB0C004EA3DE /* MainStoryboard.storyboard */,
+				B74468F514D59C6C00154F9E /* ipad.storyboard */,
 				B7B0366014BA08F5004EA3DE /* FlickrAPIKey.h */,
 				B7B0366114BA08F5004EA3DE /* FlickrFetcher.h */,
 				B7B0366214BA08F6004EA3DE /* FlickrFetcher.m */,
@@ -275,6 +278,7 @@
 			files = (
 				B7B0363914B9CB0C004EA3DE /* InfoPlist.strings in Resources */,
 				B7B0364214B9CB0C004EA3DE /* MainStoryboard.storyboard in Resources */,
+				B74468F614D59C6E00154F9E /* ipad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,7 +432,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Top Places/Fast Map Places-Prefix.pch";
 				INFOPLIST_FILE = "Top Places/Fast Map Places-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "Fast Map Places";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -440,7 +446,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Top Places/Fast Map Places-Prefix.pch";
 				INFOPLIST_FILE = "Top Places/Fast Map Places-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "Fast Map Places";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
