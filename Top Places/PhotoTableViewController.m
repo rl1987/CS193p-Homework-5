@@ -52,8 +52,7 @@
     NSDictionary *photo = [self.photos objectAtIndex:[indexPath row]];
     
     NSString *title = [photo objectForKey:@"title"];
-    NSString *subtitle = [[photo objectForKey:@"description"] 
-                          objectForKey:@"_content"];   
+    NSString *subtitle = [photo valueForKeyPath:@"description._content"]; 
     
     if ([title length]==0)
     {
@@ -71,6 +70,28 @@
     
     return cell;
 }
+
+- (void)tableView:(UITableView *)tableView 
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] != 
+        UIUserInterfaceIdiomPad)
+        return;
+    
+    NSDictionary *photo = [self.photos objectAtIndex:[indexPath row]];
+    
+    NSURL *photoURL = 
+    [FlickrFetcher urlForPhoto:photo format:FlickrPhotoFormatLarge];
+    
+    ImageViewController *ivc = 
+    (ImageViewController *) [[self.splitViewController viewControllers] 
+                             lastObject];
+    
+    [ivc setImageURL:photoURL];
+    
+}
+
+#pragma mark -
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

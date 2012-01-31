@@ -214,8 +214,25 @@ typedef enum {
     
     MKAnnotationView *av = (MKAnnotationView *)sender.superview.superview;
     
-    [self performSegueWithIdentifier:@"Map to image" 
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == 
+        UIUserInterfaceIdiomPhone)
+    {
+        [self performSegueWithIdentifier:@"Map to image" 
                               sender:av];
+    }
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == 
+             UIUserInterfaceIdiomPad)
+    {
+        ImageViewController *ivc = 
+        (ImageViewController *)[self.splitViewController.viewControllers 
+                                lastObject];
+        
+        NSURL *photoURL = 
+        [FlickrFetcher urlForPhoto:[(PhotoAnnotation *) av.annotation photo]  
+                            format:FlickrPhotoFormatLarge]; 
+        
+        [ivc setImageURL:photoURL];
+    }
     
     [self addPhotoToRecents:[(PhotoAnnotation *)av.annotation photo]];
 }
