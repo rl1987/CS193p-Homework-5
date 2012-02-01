@@ -15,6 +15,7 @@
 
 - (IBAction)placeCalloutButtonPressed:(id)sender;
 - (IBAction)photoCalloutButtonPressed:(id)sender;
+- (IBAction)modeChanged:(UISegmentedControl *)sender;
 
 - (void)showLocation:(NSDictionary *)location;
 - (void)showCoordinateRegion:(MKCoordinateRegion)region;

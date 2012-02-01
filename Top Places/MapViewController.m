@@ -237,6 +237,26 @@ typedef enum {
     [self addPhotoToRecents:[(PhotoAnnotation *)av.annotation photo]];
 }
 
+- (IBAction)modeChanged:(UISegmentedControl *)sender 
+{
+    NSInteger selected = sender.selectedSegmentIndex;
+    
+    switch (selected) {
+        case 0:
+            [self.mapView setMapType:MKMapTypeStandard];
+            break;
+        case 1:
+            [self.mapView setMapType:MKMapTypeSatellite];
+            break;
+        case 2:
+            [self.mapView setMapType:MKMapTypeHybrid];
+            break;            
+        default:
+            break;
+    }
+    
+}
+
 - (IBAction)placeCalloutButtonPressed:(UIButton *)sender
 {
     NSLog(@"MapViewController placeCalloutButtonPressed:");

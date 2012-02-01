@@ -169,13 +169,32 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ftu-t6-M7g" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="Dl0-CD-0LL" customClass="MapViewController" sceneMemberID="viewController">
-                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="cTJ-fq-hEz">
+                    <view key="view" contentMode="scaleToFill" id="UMd-9c-L8n">
                         <rect key="frame" x="0.0" y="64" width="320" height="739"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <connections>
-                            <outlet property="delegate" destination="Dl0-CD-0LL" id="6QA-Dj-VpC"/>
-                        </connections>
-                    </mapView>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="cTJ-fq-hEz">
+                                <rect key="frame" x="-1" y="-6" width="320" height="745"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Dl0-CD-0LL" id="6QA-Dj-VpC"/>
+                                </connections>
+                            </mapView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="IWg-Y0-TYn">
+                                <rect key="frame" x="56" y="690" width="207" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Standard"/>
+                                    <segment title="Satellite"/>
+                                    <segment title="Hybrid"/>
+                                </segments>
+                                <connections>
+                                    <action selector="modeChanged:" destination="Dl0-CD-0LL" eventType="valueChanged" id="7OL-Mf-vVZ"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
                     <navigationItem key="navigationItem" id="pvc-hj-uYS"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
