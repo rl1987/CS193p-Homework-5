@@ -1,14 +1,3 @@
 TODO;
 
-1. Finish implementing currently semi-functional NSWritableCache class.
-2. iPad support.
-
-3. MapViewController is supposed to display geographic information: places 
-and geotagged Flickr photos.
-
-If mapView's zoom scale is large enough (consider that map view is displaying
-stuff on national/international/continental level) it is annotated with pins
-that mark Flickr favorite cities. When user zooms in to one of these cities,
-map view removes city pins and adds pins that are annotated with information
-about photos. Each annotation contains a button that allows one to view picture
-via ImageViewController.
+...

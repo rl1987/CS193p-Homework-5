@@ -11,7 +11,4 @@
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 
-+ (NSCache *)defaultCache;
-+ (void)setDefaultCache:(NSCache *)cache;
-
 @end

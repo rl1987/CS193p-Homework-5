@@ -1,7 +1,5 @@
 #import "ImageViewController.h"
 
-static NSCache *_cache = nil;
-
 @interface ImageViewController()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -24,27 +22,6 @@ static NSCache *_cache = nil;
 
 #define CACHE_COST_LIMIT 10*1024*1024 // 10 MB
 
-+ (NSCache *)defaultCache
-{
-    if (_cache == nil)
-    {
-        _cache = [[NSCache alloc] init];
-        
-        [_cache setTotalCostLimit:CACHE_COST_LIMIT]; 
-        
-        [_cache setCountLimit:0]; // Number of cached photos is
-                                  // unlimited, as long as they
-                                  // don't take 10 MB of space.
-    }
-    
-    return _cache;
-}
-
-+ (void)setDefaultCache:(NSCache *)cache
-{
-    _cache = cache;
-}
-
 - (void)cacheImage
 {
     NSLog(@"ImageViewController cacheImage");
@@ -57,11 +34,7 @@ static NSCache *_cache = nil;
     NSData *imageData = UIImageJPEGRepresentation(self.imageView.image, 1.0);
     
     NSUInteger imageDataSize = [imageData length];
-    
-    [[ImageViewController defaultCache] setObject:imageData 
-                                           forKey:photoId 
-                                             cost:[imageData length]];
-    
+   
     NSFileManager *fileman = [NSFileManager defaultManager];
     
      
@@ -205,24 +178,18 @@ static NSCache *_cache = nil;
     dispatch_async(imageDownloadQ, ^{
         UIImage *image;
         
-        NSData *cachedData = 
-        [[ImageViewController defaultCache] objectForKey:[self imageId]];
+        NSFileManager *fileman = [NSFileManager defaultManager];
         
-        if (!cachedData)
-        {
-            NSFileManager *fileman = [NSFileManager defaultManager];
-            
-            NSString *cacheDirectoryPath = 
-            [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                 NSUserDomainMask, 
-                                                 YES) objectAtIndex:0];
-            
-            NSString *filePath = 
-            [cacheDirectoryPath stringByAppendingPathComponent:
-             [[self imageId] stringByAppendingString:@".jpg"]];
-            
-            cachedData = [fileman contentsAtPath:filePath];
-        }
+        NSString *cacheDirectoryPath = 
+        [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                             NSUserDomainMask, 
+                                             YES) objectAtIndex:0];
+        
+        NSString *filePath = 
+        [cacheDirectoryPath stringByAppendingPathComponent:
+         [[self imageId] stringByAppendingString:@".jpg"]];
+        
+        NSData *cachedData = [fileman contentsAtPath:filePath];
         
         if (cachedData)
             image = [UIImage imageWithData:cachedData];
@@ -292,8 +259,6 @@ static NSCache *_cache = nil;
 {
     if (self.splitViewController)
         self.splitViewController.delegate = self;
-    
-    //[[ImageViewController defaultCache] readFromDisk];
 }
 
 - (void)viewDidLoad
