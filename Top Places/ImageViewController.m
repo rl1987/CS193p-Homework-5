@@ -47,6 +47,8 @@ static NSCache *_cache = nil;
 
 - (void)cacheImage
 {
+    NSLog(@"ImageViewController cacheImage");
+    
     if (!self.imageView.image)
         return;
     
@@ -54,16 +56,78 @@ static NSCache *_cache = nil;
     
     NSData *imageData = UIImageJPEGRepresentation(self.imageView.image, 1.0);
     
+    NSUInteger imageDataSize = [imageData length];
+    
     [[ImageViewController defaultCache] setObject:imageData 
                                            forKey:photoId 
                                              cost:[imageData length]];
     
     NSFileManager *fileman = [NSFileManager defaultManager];
     
+     
+    
     NSString *cacheDirectoryPath = 
     [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                          NSUserDomainMask, 
                                          YES) objectAtIndex:0];
+    
+    NSMutableArray *preexistingCachedFiles = 
+    [[fileman contentsOfDirectoryAtPath:cacheDirectoryPath 
+                                 error:nil] mutableCopy];    
+    
+    NSMutableDictionary *fileAttributes = [[NSMutableDictionary alloc] init];
+    
+    NSUInteger cacheSize = 0;
+    
+    for (NSString *filename in preexistingCachedFiles)
+    {
+        NSString *filePath = 
+        [cacheDirectoryPath stringByAppendingPathComponent:filename];
+        
+        NSDictionary *attributeDict = [fileman attributesOfItemAtPath:filePath
+                                                                error:nil];
+        cacheSize += [[attributeDict objectForKey:NSFileSize] integerValue];
+        
+        [fileAttributes setObject:attributeDict                                                            
+                           forKey:filename];
+    }
+    
+    preexistingCachedFiles = 
+    [[fileAttributes keysSortedByValueUsingComparator:
+     ^NSComparisonResult(id obj1, id obj2) {
+        NSDate *date1;
+        NSDate *date2;
+        
+        date1 = [(NSDictionary *)obj1 objectForKey:NSFileCreationDate];
+        date2 = [(NSDictionary *)obj2 objectForKey:NSFileCreationDate];
+        
+        return [date1 compare:date2];        
+    }] mutableCopy];
+    
+    while (imageDataSize + cacheSize >= CACHE_COST_LIMIT)
+    {
+        if ([preexistingCachedFiles count] == 0)
+            break;
+        
+        NSString *filename = [preexistingCachedFiles objectAtIndex:0];
+        
+        [preexistingCachedFiles removeObjectAtIndex:0];
+        
+        cacheSize -= [[[fileAttributes objectForKey:filename] 
+                       objectForKey:NSFileSize] integerValue];        
+        
+        [fileAttributes removeObjectForKey:filename];
+        
+        NSString *filePath = 
+        [cacheDirectoryPath stringByAppendingPathComponent:filename];
+        
+        [fileman removeItemAtPath:filePath 
+                            error:nil];
+    }
+    
+    cacheSize += imageDataSize;
+    
+    NSLog(@"%d",cacheSize);
     
     NSString *filePath = 
     [cacheDirectoryPath stringByAppendingPathComponent:
@@ -72,8 +136,7 @@ static NSCache *_cache = nil;
     [fileman createFileAtPath:filePath 
                      contents:imageData
                    attributes:nil];       
-    
-    
+
 }
 
 - (NSString *)imageId
