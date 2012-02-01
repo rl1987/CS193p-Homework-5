@@ -1,11 +1,5 @@
 #import "PlaceListViewController.h"
 
-@interface PlaceListViewController()
-
-- (void)getTopLocations;
-
-@end
-
 @implementation PlaceListViewController
 
 @synthesize places = _places;
@@ -13,65 +7,27 @@
 
 #pragma mark - View lifecycle
 
-- (void)awakeFromNib
-{
-    [self getTopLocations];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:
 (UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
 
-#pragma mark - Table view data source
-
-- (void)getTopLocations
+- (void)viewDidAppear:(BOOL)animated
 {
-        
-    dispatch_queue_t locationFetchingQueue = 
-    dispatch_queue_create("location fetching queue", NULL);
-    
-    dispatch_async(locationFetchingQueue, ^{
-        NSArray *fetchResults = [FlickrFetcher topPlaces];
-                
-        NSMutableDictionary *places = [[NSMutableDictionary alloc] init];
-        
-        for (NSDictionary *f in fetchResults)
-        {
-            NSString *country;
-            
-            NSArray *placenames = [[f objectForKey:@"_content"] 
-                                   componentsSeparatedByString:@", "];
-            
-            if ([placenames count]>=2)
-                country = [placenames lastObject];
-            else
-                country = @"Unknown";
-            
-            if (![places objectForKey:country])
-                [places setObject:[NSMutableArray array] forKey:country];
-            
-            [[places objectForKey:country] addObject:f];
-            
-        }
-        
-        self.places = places;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-        
-    });
-    
-    dispatch_release(locationFetchingQueue);
-    
+    [self refresh:self.navigationItem.leftBarButtonItem];
 }
+
+- (void)viewDidUnload {
+    [self setRefreshButton:nil];
+    
+    [super viewDidUnload];
+}
+
+#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //[self getTopLocations];
-    
     return [self.places count];
 }
 
@@ -133,6 +89,8 @@ titleForHeaderInSection:(NSInteger)section
     return cell;
 }
 
+#pragma mark -
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     
@@ -165,15 +123,59 @@ titleForHeaderInSection:(NSInteger)section
     
 }
 
-- (void)viewDidUnload {
-    [self setRefreshButton:nil];
-
-    [super viewDidUnload];
-}
+#pragma mark -
+#pragma mark Target-action stuff
 
 - (IBAction)refresh:(id)sender 
 {
-    [self getTopLocations];
+    dispatch_queue_t locationFetchingQueue = 
+    dispatch_queue_create("location fetching queue", NULL);
+        
+    UIActivityIndicatorView *refreshSpinner =
+    [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+     UIActivityIndicatorViewStyleGray];
+    
+    [refreshSpinner startAnimating];
+    
+    self.navigationItem.leftBarButtonItem = 
+    [[UIBarButtonItem alloc] initWithCustomView:refreshSpinner];
+    
+    dispatch_async(locationFetchingQueue, ^{
+        NSArray *fetchResults = [FlickrFetcher topPlaces];
+        
+        NSMutableDictionary *places = [[NSMutableDictionary alloc] init];
+        
+        for (NSDictionary *f in fetchResults)
+        {
+            NSString *country;
+            
+            NSArray *placenames = [[f objectForKey:@"_content"] 
+                                   componentsSeparatedByString:@", "];
+            
+            if ([placenames count]>=2)
+                country = [placenames lastObject];
+            else
+                country = @"Unknown";
+            
+            if (![places objectForKey:country])
+                [places setObject:[NSMutableArray array] forKey:country];
+            
+            [[places objectForKey:country] addObject:f];
+            
+        }
+        
+        self.places = places;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [refreshSpinner stopAnimating];
+            self.navigationItem.leftBarButtonItem = sender;
+            
+            [self.tableView reloadData];
+        });
+        
+    });
+    
+    dispatch_release(locationFetchingQueue);
     
 }
 
