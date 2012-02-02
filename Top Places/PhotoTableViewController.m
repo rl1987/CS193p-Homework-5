@@ -68,6 +68,25 @@
     cell.textLabel.text = title;
     cell.detailTextLabel.text = subtitle;
     
+    dispatch_queue_t q = dispatch_queue_create("thumbnail download queue", 0);
+    
+    dispatch_async(q, ^{
+        NSURL *thumbnailURL = 
+        [FlickrFetcher urlForPhoto:photo format:FlickrPhotoFormatSquare];
+        
+        UIImage *thumbnail = [UIImage imageWithData:
+                              [NSData dataWithContentsOfURL:thumbnailURL]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cell.imageView.image = thumbnail;
+            
+            [cell setNeedsLayout];
+        });
+                            
+    });
+    
+    dispatch_release(q);
+    
     return cell;
 }
 
